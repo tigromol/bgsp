@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./deployments/postgres/:/docker-entrypoint-initdb.d/
+  golang:
+    build:
+      context: ./
+      dockerfile: build/package/Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
