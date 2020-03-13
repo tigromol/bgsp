@@ -1,1 +1,1 @@
-docker-compose -f ./deployments/docker-compose.yaml --project-directory ./ $@
+sudo docker-compose -f ./deployments/docker-compose.yaml --project-directory ./ $@
