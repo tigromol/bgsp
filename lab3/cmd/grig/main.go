@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	_ "github.com/lib/pq"
 	"grig/internal/handler/group"
 	"grig/internal/handler/journal"
@@ -17,6 +18,13 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID, middleware.Logger, middleware.Recoverer)
 	r.Use(middleware.Timeout(time.Second * 60))
+	cors := cors.New(cors.Options{
+		AllowedOrigins:     []string{"*"},
+		AllowedMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:     []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		MaxAge:             300,
+	})
+	r.Use(cors.Handler)
 	repo, err := repository.New()
 	if err != nil {
 		log.Fatalf("failed to initialize cause %+v", err)
