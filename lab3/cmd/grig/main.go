@@ -5,6 +5,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	_ "github.com/lib/pq"
+	"grig/internal/handler/bus"
 	"grig/internal/handler/group"
 	"grig/internal/handler/journal"
 	"grig/internal/handler/student"
@@ -32,7 +33,10 @@ func main() {
 	studentHandler := student.New(repo)
 	groupHandler := group.New(repo)
 	journalHandler := journal.New(repo)
+	busHandler := bus.New()
 	r.Route("/api", func(r chi.Router) {
+		r.Post("/bus/students/{id}", busHandler.Post)
+
 		r.Get("/students/{id}", studentHandler.Get)
 		r.Get("/students", studentHandler.GetAll)
 		r.Put("/students", studentHandler.Put)
